@@ -303,22 +303,33 @@ class CelestialBody():
             elif data_base_name in COMETS:
                 self._params = update_comet_params(data_base_name)
             else:
-                print("Unknown object:", data_base_name)
-                print("To check available bodies, see 'BODIES' list")
-                return
+                try:
+                    self._params = update_planet_params(data_base_name)
+                except:
+                    pass
+                try:
+                    self._params = update_asteroid_params(data_base_name)
+                except:
+                    pass
+                try:
+                    self._params = update_unnumbered_asteroid_params(data_base_name)
+                except:
+                    pass
+                try:
+                    self._params = update_comet_params(data_base_name)
+                except:
+                    print("Unknown object:", data_base_name)
+                    print("To check available bodies, see 'BODIES' list")
+                    return
         else:
             if category == "planet":
                 self._params = update_planet_params(data_base_name)
-                self.fullname = self._params["name"]
             elif category == "asteroid":
                 self._params = update_asteroid_params(data_base_name)
-                self.fullname = "("+str(self._params["number"])+") " + self._params["name"]
             elif category == "unnumbered_asteroid":
                 self._params = update_unnumbered_asteroid_params(data_base_name)
-                self.fullname = self._params["name"]
             elif category == "comet":
                 self._params = update_comet_params(data_base_name)
-                self.fullname = self._params["number"] + "/" + self._params["name"]
             else:
                 print("Unknown category:", data_base_name)
                 print("Available categories: 'planet', 'asteroid' or 'comet'")
@@ -330,6 +341,15 @@ class CelestialBody():
 
         self.name     = name
         self.category = self._params["category"]
+        if self.category == "planet":
+            self.fullname = self._params["name"]
+        elif self.category == "asteroid":
+            self.fullname = "(" + str(self._params["number"]) + ") " + self._params["name"]
+        elif self.category == "unnumbered_asteroid":
+            self.fullname = self._params["name"]
+        elif self.category == "comet":
+            self.fullname = self._params["number"] + "/" + self._params["name"]
+
         self.epoch    = self._params["epoch"]
 
         self.a0 = self._params["semimajor_axis"]
@@ -681,7 +701,7 @@ class CelestialBody():
         X,Y,Z = positions[:,0], positions[:,1], positions[:,2]
         return np.array(X), np.array(Y), np.array(Z), np.array(days)
 
-    def data_position_txt(self, start=None, stop=None, step=None, filename=None, header=None, cols="xy", precision=5):
+    def data_position_txt(self, start=None, stop=None, step=None, filename=None, header=None, cols="xyz", precision=5):
         """
         :params:    start: datetime starting date, default is today
                     stop: datetime stop date, default is today + orbital period
