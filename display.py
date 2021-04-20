@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import animation
 import datetime
-from celestialbody.celestialbody import CelestialBody
+from celestialbody import CelestialBody
 
 def prepare_data(names, ref=None, start=None, stop=None, step=None):
     Xs, Ys, Zs, dates = [], [], [], []

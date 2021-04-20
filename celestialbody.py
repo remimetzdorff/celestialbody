@@ -339,7 +339,7 @@ class CelestialBody():
         self.tolerance_rad = deg_to_rad(self.tolerance)
         self.max_iter = 1000
 
-        self.name     = name
+        self.name     = self._params["name"]
         self.category = self._params["category"]
         if self.category == "planet":
             self.fullname = self._params["name"]
